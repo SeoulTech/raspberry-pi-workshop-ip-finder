@@ -13,5 +13,6 @@ indexes:
 - kind: IpRecord
   ancestor: yes
   properties:
-  - name: date
-    direction: desc
+  - name: host
+  - name: ip
+  - name: mac

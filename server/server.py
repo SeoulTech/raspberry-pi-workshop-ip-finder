@@ -22,8 +22,7 @@ class MainPage(webapp2.RequestHandler):
             self.redirect(users.create_login_url(self.request.uri))
             return
 
-        ip_records_query = IpRecord.query(
-            ancestor=ndb.Key('raspberry_ip_finder','2014')).order(-IpRecord.date)
+        ip_records_query = IpRecord.query(projection=['ip', 'host', 'mac'], group_by=['mac', 'ip', 'host'], ancestor=ndb.Key('raspberry_ip_finder','2014')).order(IpRecord.host)
         ip_records = ip_records_query.fetch(10)
 
 
