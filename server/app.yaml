@@ -1,0 +1,12 @@
+application: raspberry-pi-workshop
+version: 1
+runtime: python27
+api_version: 1
+threadsafe: true
+
+handlers:
+- url: /ip.*
+  script: server.ip_change_service
+
+- url: /.*
+  script: server.gui
