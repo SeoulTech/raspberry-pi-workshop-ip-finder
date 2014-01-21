@@ -16,11 +16,11 @@ class IpRecord(ndb.Model):
 
 class IpNote(messages.Message):
     """"Message in client-server RPC to track IP changes"""
-    ip = messages.StringField(1, required=True)
-    host = messages.StringField(2, required=False)
-    when = messages.IntegerField(3)
-    mac = messages.StringField(4, required=False)
-    ssid = messages.StringField(5, required=False)
+    IP = messages.StringField(1, required=True)
+    Host = messages.StringField(2)
+    When = messages.IntegerField(3)
+    MAC = messages.StringField(4)
+    SSID = messages.StringField(5)
 
 
 
@@ -31,15 +31,15 @@ class IpService(remote.Service):
     def post(self, request):
 
         # If the Note instance has a timestamp, use that timestamp
-        if request.when is not None:
-            when = datetime.datetime.utcfromtimestamp(request.when)
+        if request.When:
+            when = datetime.datetime.utcfromtimestamp(request.When)
 
         # Else use the current time
         else:
             when = datetime.datetime.now()
         rIp = IpRecord(parent=ndb.Key('raspberry_ip_finder','2014'),
-                       ip=request.ip,
-                       host=request.host,
+                       ip=request.IP,
+                       host=request.Host,
                        date=when)
         rIp.put()
         return message_types.VoidMessage()

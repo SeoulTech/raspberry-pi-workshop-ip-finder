@@ -1,0 +1,25 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN">
+<html lang="en">
+  <header>
+    <title>Raspbery Pi - IP Finder</title>
+  </header>
+
+  <body>
+    <h2>A list of Paspberry Pi:</h2>
+    {% for item in ips %}
+      <li>{{ item.ip }} {{ ' - %s' % item.host if item.host }}</li>
+      {# item.host|default('', true) #}
+      
+    {% endfor %}
+
+    <script>
+      channel = new goog.appengine.Channel('{{ token }}');
+      socket = channel.open();
+      socket.onopen = onOpened;
+      socket.onmessage = onMessage;
+      socket.onerror = onError;
+      socket.onclose = onClose;
+    </script>
+  </body>
+
+</html>
