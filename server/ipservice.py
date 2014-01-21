@@ -10,8 +10,9 @@ from google.appengine.ext import ndb
 class IpRecord(ndb.Model):
     """Models an individual device IP record """
     ip =  ndb.StringProperty()
-    host =  ndb.StringProperty()
+    host = ndb.StringProperty()
     date = ndb.DateTimeProperty(auto_now_add=True)
+    mac = ndb.StringProperty()
 
 
 class IpNote(messages.Message):
@@ -40,7 +41,8 @@ class IpService(remote.Service):
         rIp = IpRecord(parent=ndb.Key('raspberry_ip_finder','2014'),
                        ip=request.IP,
                        host=request.Host,
-                       date=when)
+                       date=when,
+                       mac=request.MAC)
         rIp.put()
         return message_types.VoidMessage()
 

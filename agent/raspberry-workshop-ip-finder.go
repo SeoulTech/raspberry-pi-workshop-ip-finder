@@ -6,7 +6,7 @@ import (
 	"errors"
 	"flag"
 	"fmt"
-	"io/ioutil"
+//	"io/ioutil"
 	"log"
 	"net"
 	"net/http"
@@ -25,10 +25,10 @@ func main() {
 	flag.Parse()
 
 	var hostname, _ = getHostname()
-	var ip, _ = getLocalIP()
-	log.Printf("Host: %v\n  IP: %v\n", hostname, ip.String())
+	var mac, ip, _ = getLocalIP()
+	log.Printf("Host: %v\n  IP: %v MAC: %s\n", hostname, ip.String(), mac)
 
-	message := &RaspberryStatus{ip.String(), hostname, "not-impl"}
+	message := &RaspberryStatus{ip.String(), hostname, mac.String()}
 	message.sendToServer(*url)
 }
 
@@ -45,20 +45,20 @@ func (status *RaspberryStatus) sendToServer(url string) {
 		log.Fatal("Request to server failed: ", err)
 		return
 	}
-	defer resp.Body.Close();
-	body, err := ioutil.ReadAll(resp.Body)
+	defer resp.Body.Close()
+	//body, err := ioutil.ReadAll(resp.Body)
 	//log.Printf("%s", body)
 }
 
-func getLocalIP() (net.IP, error) {
-	tt, err := net.Interfaces()
+func getLocalIP() (net.HardwareAddr, net.IP, error) {
+	interfaces, err := net.Interfaces()
 	if err != nil {
-		return nil, err
+		return nil, nil, err
 	}
-	for _, t := range tt {
-		aa, err := t.Addrs()
+	for _, inter := range interfaces {
+		aa, err := inter.Addrs()
 		if err != nil {
-			return nil, err
+			return nil, nil, err
 		}
 		for _, a := range aa {
 			ipnet, ok := a.(*net.IPNet)
@@ -69,10 +69,10 @@ func getLocalIP() (net.IP, error) {
 			if v4 == nil || v4[0] == 127 { // loopback address
 				continue
 			}
-			return v4, nil
+			return inter.HardwareAddr, v4, nil
 		}
 	}
-	return nil, errors.New("cannot find local IP address")
+	return nil, nil, errors.New("cannot find local IP address")
 }
 
 func getHostname() (string, error) {
