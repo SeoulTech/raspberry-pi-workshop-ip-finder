@@ -8,6 +8,9 @@ libraries:
 - name: jinja2
   version: "latest"
 
+builtins:
+- appstats: on
+
 handlers:
 - url: /ip.*
   script: server.ip_change_service
