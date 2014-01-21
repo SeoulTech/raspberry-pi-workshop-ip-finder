@@ -29,3 +29,14 @@ class MainPage(webapp2.RequestHandler):
 gui = webapp2.WSGIApplication([
     ('/', MainPage),
 ], debug=True)
+
+
+#TODO switch to Jinja
+#     add /get with re-direct to intaller on github
+#     add install_client.sh
+#       - downloads client.py
+#       - downloads ip-finder-deamon.sh
+#       - places it /etc/init.d
+#       - start it up
+#       - add it to runlevel to run on boot
+# 
