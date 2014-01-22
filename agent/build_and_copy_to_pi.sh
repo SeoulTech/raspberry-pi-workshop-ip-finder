@@ -34,6 +34,6 @@ if [ "x$HOST" == "x" ]; then
 fi
 
 set -e
-GOARCH=arm GOARM=5 GOOS=linux go build raspberry-workshop-ip-finder.go
-scp raspberry-workshop-ip-finder pi@$HOST:~
+GOARCH=arm GOARM=5 GOOS=linux go build raspberry-ip-finder.go
+scp raspberry-ip-finder pi@$HOST:~
 ssh pi@$HOST
